@@ -1,7 +1,79 @@
-
+<!-- 
 <div  fxLayout="row" fxLayout.xs="column" fxFlexFill>
   <div fxFlex="33" fxFlex.xs="100"><mat-slider min="1" max="100" step="1" value="50"></mat-slider></div>
   <div fxFlex="33" fxFlex.xs="100"><mat-slider min="1" max="100" step="1" value="50"></mat-slider></div>
   <div fxFlex="33" fxFlex.xs="100"><mat-slider min="1" max="100" step="1" value="50"></mat-slider></div>
 </div>
+ -->
+ <div>
+  <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>search</mat-icon>
+      <input #filter placeholder="Search for a client">
+  </div>
+</div>
 
+ <div class="content-card">
+
+  <mat-table class="products-table" 
+             #table [dataSource]="dataSource"
+             matSort matSortActive="id" matSortDirection="asc" matSortDisableClear
+>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+          <mat-cell *matCellDef="let client">
+              <p class="text-truncate">{{client.id}}</p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+            <p class="text-truncate">{{client.firstName}}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+            <p class="text-truncate">{{client.lastName}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="mobile">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+            <p class="text-truncate">{{client.mobile}}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+            <p class="text-truncate">{{client.email}}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+            <p class="text-truncate">{{client.status}}</p>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource.totalRecord"
+                 [pageIndex]="0"
+                 [pageSize]="dataSource.pageSize"
+                 (page)="onChangePage($event)"
+                 [pageSizeOptions]="pageSizes">
+  </mat-paginator>
+
+</div>

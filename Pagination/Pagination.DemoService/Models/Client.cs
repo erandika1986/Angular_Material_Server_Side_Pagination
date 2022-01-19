@@ -24,7 +24,7 @@ namespace Pagination.DemoService.Models
 
     public enum Status
     {
-        InActive=1,
-        Active=2
+        InActive=0,
+        Active=1
     }
 }

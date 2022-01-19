@@ -32,17 +32,29 @@ namespace Pagination.DemoService.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("getAllClients")]
-        public IActionResult GetAllClients(ClientFilter clientFilter)
+        public IActionResult GetAllClients([FromQuery] string searchText, [FromQuery] int currentPage, [FromQuery] int pageSize, [FromQuery] Status status)
         {
-            var filteredClients = clients
-                .Where(c=>c.Status==clientFilter.Status)
-                .Skip((clientFilter.CurrentPage - 1) * clientFilter.PageSize)
-                .Take(clientFilter.PageSize)
+            var filteredClients = clients.Where(x => x.Status == status);
+
+            if(!string.IsNullOrEmpty(searchText))
+            {
+                filteredClients = filteredClients.Where(x => x.FirstName.Contains(searchText) || x.LastName.Contains(searchText) || x.Email.Contains(searchText));
+            }
+
+            var totalRecordCount = filteredClients.Count();
+
+            var totalPageCount = (int)Math.Ceiling(Convert.ToDecimal(totalRecordCount) / pageSize);
+
+             filteredClients = filteredClients
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
-            return Ok(filteredClients);
+            var response = new PaginatedItemViewModel<Client>(currentPage, pageSize, totalPageCount, totalRecordCount, filteredClients);
+
+            return Ok(response);
         }
     }
 }
